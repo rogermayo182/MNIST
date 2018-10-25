@@ -107,9 +107,10 @@ correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 saver = tf.train.Saver()
+train_step = 10000
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    for i in range(10000):
+    for i in range(train_step):
         batch = mnist.train.next_batch(50)
         if i%100 == 0:
             train_accuracy = accuracy.eval(feed_dict={
@@ -119,6 +120,6 @@ with tf.Session() as sess:
         train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 
     saver.save(sess,"models/model.ckpt")
-print("test accuracy %g"%accuracy.eval(feed_dict={
+    print("test accuracy %g"%accuracy.eval(feed_dict={
     x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
